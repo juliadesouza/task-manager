@@ -8,5 +8,5 @@ const port = 3000;
 app.use(express.json());
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server isn running on http://localhost:${port}`);
 });
