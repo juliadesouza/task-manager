@@ -5,6 +5,7 @@ import { AppError } from "@/middlewares/error";
 import { compare } from "bcrypt";
 import { authConfig } from "@/configs/auth";
 import { sign } from "jsonwebtoken";
+import { ROLES } from "@/utils/utils";
 
 class LoginController {
   constructor() {
@@ -35,7 +36,7 @@ class LoginController {
     const { jwtSecret, expiresIn } = authConfig;
 
     // criar um JSON Web Token (JWT)
-    const token = sign({ role: user.role ?? "member" }, jwtSecret, {
+    const token = sign({ role: user.role ?? ROLES.member }, jwtSecret, {
       expiresIn,
       subject: user.id,
     });

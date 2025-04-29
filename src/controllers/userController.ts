@@ -13,9 +13,10 @@ class UserController {
       name: z.string().trim().min(1),
       email: z.string().email(),
       password: z.string().min(6),
+      role: z.enum(["MEMBER", "ADMIN"]).optional(),
     });
 
-    const { name, email, password } = schema.parse(request.body);
+    const { name, email, password, role } = schema.parse(request.body);
 
     const isUserDuplicated = await database.user.findFirst({
       where: { email },
@@ -27,7 +28,7 @@ class UserController {
 
     const secretPassword = await hash(password, 8);
     const newUser = await database.user.create({
-      data: { name, email, password: secretPassword },
+      data: { name, email, password: secretPassword, role },
     });
 
     const { password: _, ...data } = newUser;
