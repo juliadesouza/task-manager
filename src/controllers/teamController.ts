@@ -25,6 +25,21 @@ class TeamController {
     const newTeam = await database.team.create({ data: { name, description } });
     response.status(201).json(newTeam);
   }
+
+  async update(request: Request, response: Response): Promise<void> {
+    const paramsSchema = z.object({
+      id: z.string().uuid(),
+    });
+    const bodySchema = z.object({
+      description: z.string(),
+    });
+
+    const { id } = paramsSchema.parse(request.params);
+    const { description } = bodySchema.parse(request.body);
+
+    await database.team.update({ where: { id }, data: { description } });
+    response.json({});
+  }
 }
 
 export { TeamController };
