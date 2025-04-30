@@ -10,5 +10,7 @@ const teamController = new TeamController();
 teamRoutes.use(authenticate, authorize([ROLES.admin]));
 teamRoutes.post("/", teamController.create);
 teamRoutes.patch("/:id", teamController.update);
+teamRoutes.post("/members", teamController.createTeamMember);
+teamRoutes.delete("/members/:id", teamController.deleteTeamMember);
 
 export { teamRoutes };
