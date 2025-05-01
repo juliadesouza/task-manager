@@ -75,9 +75,17 @@ class TeamController {
       id: z.string().uuid(),
     });
 
-    const { id } = schema.parse(request.params);
+    const { id: userId } = schema.parse(request.params);
 
-    await database.teamMember.delete({ where: { id } });
+    const teamMember = await database.teamMember.findFirst({
+      where: { userId },
+    });
+
+    if (!teamMember) {
+      throw new AppError("Team member not found.", 404);
+    }
+
+    await database.teamMember.delete({ where: { id: teamMember.id } });
     response.status(204).json({});
   }
 
@@ -85,7 +93,16 @@ class TeamController {
     const teams = await database.team.findMany();
     response.status(200).json(teams);
   }
-  
+
+  async getTeamTasks(request: Request, response: Response) {
+    const schema = z.object({
+      id: z.string().uuid(),
+    });
+
+    const { id } = schema.parse(request.params);
+    const tasks = await database.task.findMany({ where: { teamId: id } });
+    response.status(200).json(tasks);
+  }
 }
 
 export { TeamController };

@@ -36,6 +36,17 @@ class TaskController {
       throw new AppError("Team not found", 404);
     }
 
+    const isUserMemberOfTeam = await database.teamMember.findFirst({
+      where: {
+        userId: assignedTo,
+        teamId,
+      },
+    });
+
+    if (!isUserMemberOfTeam) {
+      throw new AppError("User is not a member of the team", 403);
+    }
+
     const task = await database.task.create({
       data: { title, description, status, priority, assignedTo, teamId },
     });
