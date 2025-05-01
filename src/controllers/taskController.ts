@@ -121,6 +121,18 @@ class TaskController {
       data: { title, description, status, priority, assignedTo, teamId },
     });
 
+    const statusChanged = status !== task.status;
+    if (status && statusChanged) {
+      await database.taskHistory.create({
+        data: {
+          taskId: id,
+          changedBy: request.user!.id,
+          oldStatus: task.status,
+          newStatus: status,
+        },
+      });
+    }
+
     response.status(200).json(newTask);
   }
 
