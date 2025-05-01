@@ -8,7 +8,7 @@ class TeamController {
     this.create = this.create.bind(this);
   }
 
-  async create(request: Request, response: Response): Promise<void> {
+  async create(request: Request, response: Response) {
     const schema = z.object({
       name: z.string().min(5),
       description: z.string(),
@@ -26,7 +26,7 @@ class TeamController {
     response.status(201).json(newTeam);
   }
 
-  async update(request: Request, response: Response): Promise<void> {
+  async update(request: Request, response: Response) {
     const paramsSchema = z.object({
       id: z.string().uuid(),
     });
@@ -41,7 +41,7 @@ class TeamController {
     response.json({});
   }
 
-  async createTeamMember(request: Request, response: Response): Promise<void> {
+  async createTeamMember(request: Request, response: Response) {
     const schema = z.object({
       userId: z.string().uuid(),
       teamId: z.string().uuid(),
@@ -70,7 +70,7 @@ class TeamController {
     response.status(201).json({ userId, teamId });
   }
 
-  async deleteTeamMember(request: Request, response: Response): Promise<void> {
+  async deleteTeamMember(request: Request, response: Response) {
     const schema = z.object({
       id: z.string().uuid(),
     });
@@ -80,6 +80,12 @@ class TeamController {
     await database.teamMember.delete({ where: { id } });
     response.status(204).json({});
   }
+
+  async getTeams(request: Request, response: Response) {
+    const teams = await database.team.findMany();
+    response.status(200).json(teams);
+  }
+  
 }
 
 export { TeamController };

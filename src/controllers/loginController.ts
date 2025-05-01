@@ -12,7 +12,7 @@ class LoginController {
     this.create = this.create.bind(this);
   }
 
-  async create(request: Request, response: Response): Promise<void> {
+  async create(request: Request, response: Response) {
     const schema = z.object({
       email: z.string().email(),
       password: z.string().min(6),

@@ -59,6 +59,11 @@ class TaskController {
     response.status(200).json(task);
   }
 
+  async getTasks(request: Request, response: Response) {
+    const tasks = await database.task.findMany();
+    response.status(200).json(tasks);
+  }
+
   async update(request: Request, response: Response) {
     const querySchema = z.object({ id: z.string().uuid() });
     const bodySchema = z.object({

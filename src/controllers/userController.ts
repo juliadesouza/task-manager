@@ -8,7 +8,7 @@ class UserController {
   constructor() {
     this.create = this.create.bind(this);
   }
-  async create(request: Request, response: Response): Promise<void> {
+  async create(request: Request, response: Response) {
     const schema = z.object({
       name: z.string().trim().min(1),
       email: z.string().email(),
@@ -33,6 +33,12 @@ class UserController {
 
     const { password: _, ...data } = newUser;
     response.status(201).json(data);
+  }
+
+  async getUsers(request: Request, response: Response) {
+    const users = await database.user.findMany({});
+    const usersWithoutPassword = users.map(({ password, ...user }) => user);
+    response.status(200).send(usersWithoutPassword);
   }
 }
 
